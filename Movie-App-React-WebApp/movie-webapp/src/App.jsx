@@ -1,8 +1,11 @@
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
+
 import React, { useState } from 'react';
 import './App.css';
-import MovieSearch from './components/MovieSearch';
-import RegisterForm from './components/RegisterForm';
-import LoginForm from './components/LoginForm'; 
+
+import MovieSearch from "./pages/MovieSearch/MovieSearch";
+import RegisterForm from "./pages/Register/RegisterForm";
+import LoginForm from "./pages/Login/LoginForm";
 
 function App() {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -20,14 +23,14 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Movie Search App</h1>
-      {!isRegistered ? (
-        <RegisterForm onRegister={handleRegister} />
-      ) : !isLoggedIn ? (
-        <LoginForm onLogin={handleLogin} />
-      ) : (
-        <MovieSearch />
-      )}
+      <BrowserRouter>
+        <h1>Movie Search App</h1>
+        <Routes>
+          <Route path="/" element={<LoginForm/>} />
+          <Route path="/Register" element={<RegisterForm/>} />
+          <Route path="/MovieSearch" element={<MovieSearch/>} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

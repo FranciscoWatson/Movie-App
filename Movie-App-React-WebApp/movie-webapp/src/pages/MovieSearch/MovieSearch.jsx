@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import MovieCard from "./MovieCard";
-import MovieDetailsPopup from "./MovieDetailsPopup";
+import MovieCard from "./Components/MovieCard";
+import MovieDetails from "./Components/MovieDetails";
 
 const MovieSearch = () => {
   const [query, setQuery] = useState("");
@@ -92,7 +92,7 @@ const handleMovieSelect = (movie) => {
           ))}
         </div>
         {activeMovie && (
-          <MovieDetailsPopup
+          <MovieDetails
             movie={activeMovie}
             onClose={() => setActiveMovie(null)}
           />

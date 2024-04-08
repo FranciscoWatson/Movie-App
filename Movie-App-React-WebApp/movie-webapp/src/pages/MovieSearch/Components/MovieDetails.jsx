@@ -2,7 +2,7 @@ import React from "react";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
-const MovieDetailsPopup = ({ movie, onClose }) => {
+const MovieDetails = ({ movie, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-gray-900 rounded-lg shadow-xl overflow-hidden max-w-2xl w-full">
@@ -27,4 +27,4 @@ const MovieDetailsPopup = ({ movie, onClose }) => {
   );
 };
 
-export default MovieDetailsPopup;
+export default MovieDetails;
