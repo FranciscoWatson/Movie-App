@@ -1,48 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "./Components/MovieCard";
 import MovieDetails from "./Components/MovieDetails";
+import GenreFilter from "./Components/GenreFilter";
+
+import { fetchMovies, fetchGenres, fetchMovieGenres } from "../../Services/ApiReference";
 
 const MovieSearch = () => {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [activeMovie, setActiveMovie] = useState(null); 
-  const [genre, setGenre] = useState("");
+  const [activeMovie, setActiveMovie] = useState(null);
+  const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [actor, setActor] = useState("");
   const [director, setDirector] = useState("");
 
-  const API_KEY = "81b11a2b974891b65c1d7eb7fe785eb3";
-  const BASE_URL = "https://api.themoviedb.org/3";
-
-  const fetchMovies = async () => {
-    const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
-    const response = await fetch(url);
-    const data = await response.json();
+  useEffect(() => {
+    const fetchData = async () => {
+      const allGenres = await fetchGenres();
+      setGenres(allGenres.genres);
+    };
   
-    let filteredMovies = data.results.filter(movie => movie.poster_path); // Filtrar películas sin imagen
-  
-    if (genre) {
-      filteredMovies = filteredMovies.filter(movie => movie.genre_ids && movie.genre_ids.includes(parseInt(genre)));
-    }
-    if (actor) {
-      // Agrega aquí el filtrado por actor si es necesario
-    }
-    if (director) {
-      // Agrega aquí el filtrado por director si es necesario
-    }
-  
-    return filteredMovies;
-  };
-  
+    fetchData();
+    }, [])
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const searchedMovies = await fetchMovies();
+    const searchedMovies = await fetchMovies(query);
     setMovies(searchedMovies);
   };
 
 const handleMovieSelect = (movie) => {
   setActiveMovie(movie);
 };
+
+const handleGenreChange = (selectedGenres) => {
+  setSelectedGenres(selectedGenres);
+};
+
+useEffect(() => {
+  const fetchMoviesByGenres = async () => {
+    try {
+      const searchedMovies = await fetchMovieGenres(selectedGenres);
+      setMovies(searchedMovies);
+    } catch (error) {
+      console.error('Error al obtener películas por géneros:', error);
+    }
+  };
+
+  if (selectedGenres.length > 0 && query.length === 0) {
+    fetchMoviesByGenres();
+  }
+}, [selectedGenres]); 
 
 
   return (
@@ -54,13 +62,6 @@ const handleMovieSelect = (movie) => {
             placeholder="Search movies..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Genre"
-            value={genre}
-            onChange={(e) => setGenre(e.target.value)}
             className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
           />
           <input
@@ -83,6 +84,7 @@ const handleMovieSelect = (movie) => {
           >
             Search
           </button>
+          <GenreFilter genres={genres} selectedGenres={selectedGenres} onGenreChange={handleGenreChange} />
         </form>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-2">
           {movies.map((movie) => (
