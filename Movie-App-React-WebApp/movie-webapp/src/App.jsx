@@ -28,10 +28,10 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<LoginForm/>} />
+          <Route path="/" element={<LandingPage/>} />
           <Route path="/Register" element={<RegisterForm/>} />
           <Route path="/MovieSearch" element={<MovieSearch/>} />
-          <Route path="/LandingPage"element={<LandingPage/>} />
+          <Route path="/Login"element={<LoginForm/>} />
         </Routes>
       </BrowserRouter>
     </div>
