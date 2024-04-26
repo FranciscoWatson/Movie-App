@@ -7,6 +7,7 @@ import MovieSearch from "./pages/MovieSearch/MovieSearch";
 import RegisterForm from "./pages/Register/RegisterForm";
 import LoginForm from "./pages/Login/LoginForm";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import NavBar from "./Components/NavBar";
 
 function App() {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -25,7 +26,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <h1>Movie Search App</h1>
+        <NavBar />
         <Routes>
           <Route path="/" element={<LoginForm/>} />
           <Route path="/Register" element={<RegisterForm/>} />
