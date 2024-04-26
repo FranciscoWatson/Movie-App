@@ -6,6 +6,7 @@ import './App.css';
 import MovieSearch from "./pages/MovieSearch/MovieSearch";
 import RegisterForm from "./pages/Register/RegisterForm";
 import LoginForm from "./pages/Login/LoginForm";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<LoginForm/>} />
           <Route path="/Register" element={<RegisterForm/>} />
           <Route path="/MovieSearch" element={<MovieSearch/>} />
+          <Route path="/LandingPage"element={<LandingPage/>} />
         </Routes>
       </BrowserRouter>
     </div>
