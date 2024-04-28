@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { fetchMovies } from "../../Services/ApiReference";
+import { fetchMoviesByCategory } from "../../Services/ApiReference";
 import MovieCategoryRow from "./Components/MovieCategoryRow";
-
 const LandingPage = () => {
     const [popularMovies, setPopularMovies] = useState([]);
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
@@ -17,22 +16,22 @@ const LandingPage = () => {
     }, []);
 
     const fetchPopularMovies = async () => {
-        const movies = await fetchMovies("popular"); 
+        const movies = await fetchMoviesByCategory("popular"); 
         setPopularMovies(movies);
     };
 
     const fetchUpcomingMovies = async () => {
-        const movies = await fetchMovies("upcoming"); 
+        const movies = await fetchMoviesByCategory("upcoming"); 
         setUpcomingMovies(movies);
     };
 
     const fetchNowPlayingMovies = async () => {
-        const movies = await fetchMovies("now_playing"); 
+        const movies = await fetchMoviesByCategory("now_playing"); 
         setNowPlayingMovies(movies);
     };
 
     const fetchTopRatedMovies = async () => {
-        const movies = await fetchMovies("top_rated");
+        const movies = await fetchMoviesByCategory("top_rated");
         setTopRatedMovies(movies);
     };
 

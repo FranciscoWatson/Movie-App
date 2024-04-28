@@ -42,4 +42,14 @@ const fetchMovieGenres = async (selectedGenres) => {
     }
 }
 
-export {fetchMovies, fetchGenres, fetchMovieGenres};
+const fetchMoviesByCategory = async (category) => {
+    const url = `${BASE_URL}/movie/${category}?api_key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+  
+    let filteredMovies = data.results.filter(movie => movie.poster_path); // Filter out movies without an image
+  
+    return filteredMovies;
+};
+
+export {fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory};
