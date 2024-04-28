@@ -1,15 +1,30 @@
-// LoginForm.jsx
+
 import React, { useState } from "react";
+import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
+  const {authUser,
+        setAuthUser,
+        isLoggedIn,
+        setIsLoggedIn} = useAuth(); 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar los datos de inicio de sesión al backend
-    onLogin({ email, password });
+
+    setIsLoggedIn(true);
+    setAuthUser({
+      Name: 'Nicolas Fernandez'
+    })
+
+    navigate("/")
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-gray-800 p-8 rounded shadow-md">
