@@ -8,32 +8,25 @@ import RegisterForm from "./pages/Register/RegisterForm";
 import LoginForm from "./pages/Login/LoginForm";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import NavBar from "./Components/NavBar";
+import { AuthProvider } from "./Context/AuthContext";
+import AuthGuard from "./Guards/AuthGuard";
 
 function App() {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleRegister = (userData) => {
-    console.log("Registrando usuario:", userData);
-    setIsRegistered(true);
-  };
-
-  const handleLogin = (userData) => {
-    console.log("Iniciando sesión:", userData);
-    setIsLoggedIn(true);
-  };
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<LandingPage/>} />
-          <Route path="/Register" element={<RegisterForm/>} />
-          <Route path="/MovieSearch" element={<MovieSearch/>} />
-          <Route path="/Login"element={<LoginForm/>} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <NavBar />
+            <Routes><Route path="/Login"element={<LoginForm/>} />
+            <Route path="/Register" element={<RegisterForm/>} />
+            <Route element={<AuthGuard/>}>
+              <Route path="/" element={<LandingPage/>} />
+              <Route path="/MovieSearch" element={<MovieSearch/>} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchMovies } from "../../Services/ApiReference";
 import MovieCategoryRow from "./Components/MovieCategoryRow";
+
 const LandingPage = () => {
     const [popularMovies, setPopularMovies] = useState([]);
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
