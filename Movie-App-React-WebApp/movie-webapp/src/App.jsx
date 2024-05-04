@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import NavBar from "./Components/NavBar";
 import { AuthProvider } from "./Context/AuthContext";
 import AuthGuard from "./Guards/AuthGuard";
+import UserList from "./pages/UserList/UserList";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
             <Route element={<AuthGuard/>}>
               <Route path="/" element={<LandingPage/>} />
               <Route path="/MovieSearch" element={<MovieSearch/>} />
+              <Route path="/UserLists" element={<UserList/>} />
             </Route>
           </Routes>
         </BrowserRouter>

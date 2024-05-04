@@ -52,4 +52,22 @@ const fetchMoviesByCategory = async (category) => {
     return filteredMovies;
 };
 
-export {fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory};
+// ApiReference.js
+
+const fetchMovieDetails = async (movieId) => {
+    const url = `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Could not fetch movie details:", error);
+        return null;  // Return null or appropriate error handling
+    }
+};
+
+
+export {fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory, fetchMovieDetails};
