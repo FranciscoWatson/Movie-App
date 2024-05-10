@@ -69,20 +69,6 @@ useEffect(() => {
               onChange={(e) => setQuery(e.target.value)}
               className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
             />
-            <input
-              type="text"
-              placeholder="Actor"
-              value={actor}
-              onChange={(e) => setActor(e.target.value)}
-              className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="Director"
-              value={director}
-              onChange={(e) => setDirector(e.target.value)}
-              className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
-            />
             <button
               type="submit"
               className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
