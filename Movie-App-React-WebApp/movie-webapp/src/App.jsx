@@ -10,7 +10,8 @@ import NavBar from './Components/NavBar';
 import { AuthProvider } from './Context/AuthContext';
 import AuthGuard from './Guards/AuthGuard';
 import UserList from './pages/UserList/UserList';
-import UserProfile from './pages/UserProfile/UserProfile'; // Importamos el componente UserProfile
+import UserProfile from './pages/UserProfile/UserProfile';
+import Footer from './Components/Footer'; // Importa el componente Footer
 
 function App() {
   return (
@@ -25,10 +26,10 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/MovieSearch" element={<MovieSearch />} />
               <Route path="/UserLists" element={<UserList />} />
-              {/* Nueva ruta para mostrar el perfil del usuario */}
               <Route path="/Profile" element={<UserProfile />} />
             </Route>
           </Routes>
+          <Footer /> {/* Agrega el componente Footer al final del Router */}
         </Router>
       </AuthProvider>
     </div>

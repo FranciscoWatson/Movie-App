@@ -51,7 +51,8 @@ useEffect(() => {
     }
   };
 
-  if (selectedGenres.length > 0 && query.length === 0) {
+  if (selectedGenres.length > 0) {
+    setQuery("");
     fetchMoviesByGenres();
   }
 }, [selectedGenres]); 
