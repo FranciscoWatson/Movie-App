@@ -1,6 +1,6 @@
 // UserList.jsx
 import React, { useState, useEffect } from 'react';
-import MovieCategoryRow from '../LandingPage/Components/MovieCategoryRow';  // Adjust the path as needed
+import MovieCategoryRow from '../../Components/MovieCategoryRow';  // Adjust the path as needed
 import { fetchMovieDetails } from "../../Services/ApiReference"; // Ensure the path is correct
 
 const UserList = () => {
@@ -22,9 +22,6 @@ const UserList = () => {
                 const movies = await Promise.all(movieIds.map(id => fetchMovieDetails(id)));
                 newLists[listName] = movies.filter(movie => movie !== null);
             }
-
-            // Fetch movies for the favorites list
-
 
             console.log("New lists with movie details:", newLists);
             setLists(newLists);

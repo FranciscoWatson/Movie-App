@@ -1,6 +1,6 @@
 // MovieCategoryRow.jsx
 import React from 'react';
-import MovieCard from "../../MovieSearch/Components/MovieCard";  // Ensure the path is correct
+import MovieCard from "./MovieCard";  // Ensure the path is correct
 
 const MovieCategoryRow = ({ title, movies }) => {
     return (

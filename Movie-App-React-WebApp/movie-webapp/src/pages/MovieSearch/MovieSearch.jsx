@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MovieCard from "./Components/MovieCard";
+import MovieCard from "../../Components/MovieCard";
 import MovieDetails from "./Components/MovieDetails";
 import GenreFilter from "./Components/GenreFilter";
 
