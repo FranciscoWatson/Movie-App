@@ -4,10 +4,10 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className="bg-netflix-dark py-8 text-white">
-      <div className="container mx-auto flex justify-center items-center">
-        <div className="mr-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-center items-center">
+        <div className="mb-6 sm:mb-0 sm:mr-6 text-center sm:text-left">
           <h3 className="text-lg font-bold mb-4 text-gray-400">Síguenos en redes sociales</h3>
-          <div className="flex items-center space-x-4">
+          <div className="flex justify-center sm:justify-start items-center space-x-4">
             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
               <FaFacebook className="text-3xl hover:text-blue-500 text-gray-400 transition-colors duration-300" />
             </a>
@@ -22,7 +22,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div>
+        <div className="text-center sm:text-left">
           <h3 className="text-lg font-bold mb-4 text-gray-400">Contacto</h3>
           <p className="text-sm text-gray-400">Dirección: Av. Libertador 1849, Ciudad de Buenos Aires</p>
           <p className="text-sm text-gray-400">Teléfono: +123 456 789</p>
