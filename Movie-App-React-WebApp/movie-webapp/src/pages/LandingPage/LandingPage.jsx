@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { fetchMoviesByCategory } from "../../Services/ApiReference";
 import MovieCategoryRow from "../../Components/MovieCategoryRow";
+import { useAuth } from "../../Context/AuthContext";
 const LandingPage = () => {
     const [popularMovies, setPopularMovies] = useState([]);
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
     const [upcomingMovies, setUpcomingMovies] = useState([]);
     const [topRatedMovies, setTopRatedMovies] = useState([]);
 
+    const {authUser} = useAuth();
 
     useEffect(() => {
         fetchPopularMovies();
@@ -38,7 +40,7 @@ const LandingPage = () => {
 
     return (
         <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
-            <h1 className="text-3xl font-bold text-center mb-8">Welcome!</h1>
+            <h1 className="text-3xl font-bold text-center mb-8">Welcome! {authUser?.username}</h1>
             <MovieCategoryRow title="Popular Movies" movies={popularMovies} />
             <MovieCategoryRow title="Upcoming Movies" movies={upcomingMovies} />
             <MovieCategoryRow title="Now Playing Movies" movies={nowPlayingMovies} />

@@ -1,9 +1,10 @@
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { loginUser } from "../../Services/BackendApi";
 
 const LoginForm = ({ onLogin }) => {
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -13,16 +14,26 @@ const LoginForm = ({ onLogin }) => {
         isLoggedIn,
         setIsLoggedIn} = useAuth(); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsLoggedIn(true);
-    setAuthUser({
-      Name: 'Nicolas Fernandez',
-      Id: 'uahdjsa'
-    })
+    try {
+      // Aquí realiza la solicitud a tu API
+      const response = await loginUser({username, password});
+      console.log(response);
+      console.log(response.user.username);
 
-    navigate("/")
+      setIsLoggedIn(true);
+      setAuthUser({
+        "username": response.user.username,
+        "firstname": response.user.firstName,
+        "lastname": response.user.lastName
+      });
+      navigate("/");
+
+    } catch (error) {
+      console.error('Request failed:', error);
+    }
   };
   
 
@@ -35,10 +46,10 @@ const LoginForm = ({ onLogin }) => {
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-gray-800 p-8 rounded shadow-md">
         <h2 className="text-2xl font-bold mb-4 text-center text-white">Login</h2>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="username"
+          placeholder="username"
+          value={username}
+          onChange={(e) => setusername(e.target.value)}
           className="block w-full p-3 mb-4 border border-gray-700 rounded-md focus:outline-none focus:ring focus:border-yellow-400 transition duration-300 bg-gray-800 text-white"
         />
         <input
