@@ -7,6 +7,9 @@ const LoginForm = ({ onLogin }) => {
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const navigate = useNavigate();
 
   const {authUser,
@@ -18,7 +21,6 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      // Aquí realiza la solicitud a tu API
       const response = await loginUser({username, password});
       console.log(response);
       console.log(response.user.username);
@@ -32,7 +34,8 @@ const LoginForm = ({ onLogin }) => {
       navigate("/");
 
     } catch (error) {
-      console.error('Request failed:', error);
+      setError(true);
+      setErrorMessage("Usuario o contraseña invalidos");
     }
   };
   
@@ -49,16 +52,28 @@ const LoginForm = ({ onLogin }) => {
           type="username"
           placeholder="username"
           value={username}
-          onChange={(e) => setusername(e.target.value)}
+          onChange={(e) => {
+            setError(false);
+            setusername(e.target.value)
+            }}
           className="block w-full p-3 mb-4 border border-gray-700 rounded-md focus:outline-none focus:ring focus:border-yellow-400 transition duration-300 bg-gray-800 text-white"
         />
+
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setError(false);
+            setPassword(e.target.value)
+            }}
           className="block w-full p-3 mb-4 border border-gray-700 rounded-md focus:outline-none focus:ring focus:border-yellow-400 transition duration-300 bg-gray-800 text-white"
         />
+
+        {error && <div className="bg-orange-600 text-white p-3 mb-4 ">
+                  {errorMessage}
+                </div>}
+
         <button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md transition duration-300">
           Login
         </button>

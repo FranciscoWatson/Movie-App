@@ -101,8 +101,8 @@ app.delete('/api/users/:username/lists/:listId', async (req, res) => {
 });
 
 // Endpoint para agregar una película a una lista de películas específica de un usuario
-app.post('/api/users/:username/lists/:listId/addMovie', async (req, res) => {
-  const { username, listId } = req.params;
+app.post('/api/users/:username/lists/:listName/addMovie', async (req, res) => {
+  const { username, listName } = req.params;
   const { movieId } = req.body;
 
   try {
@@ -112,7 +112,7 @@ app.post('/api/users/:username/lists/:listId/addMovie', async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    let list = user.lists.find((list) => list._id.toString() === listId);
+    let list = user.lists.find((list) => list.name === listName);
 
     if (!list) {
       return res.status(404).send('List not found');
@@ -183,7 +183,7 @@ app.post('/api/register', async (req, res) => {
     res.status(201).send(user);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(401).send("Invalid username");
   }
 });
 
@@ -246,8 +246,26 @@ app.put('/api/users/:username', async (req, res) => {
   }
 });
 
+// Endpoint para obtener las listas de películas de un usuario
+app.get('/api/users/:username/favorites', async (req, res) => {
+    const { username } = req.params;
+  
+    try {
+      const user = await User.findOne({ username });
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      res.status(200).send(user.favoriteList);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  });
+
 // Endpoint para agregar una película a la lista de favoritos de un usuario
-app.post('/api/users/:username/favorites', async (req, res) => {
+app.post('/api/users/:username/addFavorites', async (req, res) => {
   const { username } = req.params;
   const { movieId } = req.body;
 

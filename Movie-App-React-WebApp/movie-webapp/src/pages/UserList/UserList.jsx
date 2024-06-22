@@ -2,31 +2,34 @@
 import React, { useState, useEffect } from 'react';
 import MovieCategoryRow from '../../Components/MovieCategoryRow';  // Adjust the path as needed
 import { fetchMovieDetails } from "../../Services/ApiReference"; // Ensure the path is correct
-import { getUserLists } from '../../Services/BackendApi';
+import { getUserLists, getFavoriteList } from '../../Services/BackendApi';
+import { useAuth } from "../../Context/AuthContext";
 
 const UserList = () => {
-    const [lists, setLists] = useState({});
+    const [favorites, setFavorites] = useState([])
+    const [lists, setLists] = useState([]);
+
+    const { authUser } = useAuth();
 
     useEffect(() => {
-        const storedLists = JSON.parse(localStorage.getItem('userLists')) || {};
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
         const fetchAllMovies = async () => {
             const newLists = {};
-            const userLists = await getUserLists('uahdjsa');
+            const userLists = await getUserLists(authUser.username);
+            const favoriteMoviesList = await getFavoriteList(authUser.username);
+
+            setFavorites(favoriteMoviesList);
             setLists(userLists);
-            // Fetch movies for each custom list
-            if (favorites.length) {
-                const favoriteMovies = await Promise.all(favorites.map(id => fetchMovieDetails(id)));
-                newLists['Favorites'] = favoriteMovies.filter(movie => movie !== null);
-            }
+
+            const favoriteMovies = await Promise.all(favoriteMoviesList.map(id => fetchMovieDetails(id)));
+            newLists['Favorites'] = favoriteMovies.filter(movie => movie !== null);
             
-            for (const [listName, movieIds] of Object.entries(storedLists)) {
+            for (const list of userLists) {
+                const { name: listName, movies: movieIds } = list;
                 const movies = await Promise.all(movieIds.map(id => fetchMovieDetails(id)));
                 newLists[listName] = movies.filter(movie => movie !== null);
             }
 
-            console.log("New lists with movie details:", newLists);
             setLists(newLists);
         };
 
