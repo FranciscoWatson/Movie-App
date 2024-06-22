@@ -5,7 +5,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3001;
 
+const cors = require('cors'); // Importa el paquete cors
+
 app.use(bodyParser.json());
+app.use(cors());
 
 mongoose.connect('mongodb://localhost:27017/movieapp');
 

@@ -18,7 +18,8 @@ const LoginForm = ({ onLogin }) => {
 
     setIsLoggedIn(true);
     setAuthUser({
-      Name: 'Nicolas Fernandez'
+      Name: 'Nicolas Fernandez',
+      Id: 'uahdjsa'
     })
 
     navigate("/")

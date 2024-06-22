@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import MovieCategoryRow from '../../Components/MovieCategoryRow';  // Adjust the path as needed
 import { fetchMovieDetails } from "../../Services/ApiReference"; // Ensure the path is correct
+import { getUserLists } from '../../Services/BackendApi';
 
 const UserList = () => {
     const [lists, setLists] = useState({});
@@ -12,6 +13,8 @@ const UserList = () => {
 
         const fetchAllMovies = async () => {
             const newLists = {};
+            const userLists = await getUserLists('uahdjsa');
+            setLists(userLists);
             // Fetch movies for each custom list
             if (favorites.length) {
                 const favoriteMovies = await Promise.all(favorites.map(id => fetchMovieDetails(id)));

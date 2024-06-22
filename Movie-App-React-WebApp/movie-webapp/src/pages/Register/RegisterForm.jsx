@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../Services/BackendApi";
 
 const RegisterForm = ({ onRegister }) => {
   const [username, setUsername] = useState("");
@@ -10,7 +11,7 @@ const RegisterForm = ({ onRegister }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -18,7 +19,17 @@ const RegisterForm = ({ onRegister }) => {
       return;
     }
 
+    const response = await registerUser({
+      "username": username,
+      "email": email,
+      "password": password,
+      "firstName": firstName,
+      "lastName": lastName,
+      "location": "Cinema City",
+      "bio": "I love watching movies!"
+    })
 
+    console.log(response);
     navigate("/Login");
   };
 
