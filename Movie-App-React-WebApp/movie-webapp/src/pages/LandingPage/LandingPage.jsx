@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { fetchMoviesByCategory } from "../../Services/ApiReference";
 import MovieCategoryRow from "../../Components/MovieCategoryRow";
+import MovieDetails from "../MovieSearch/Components/MovieDetails";
 import { useAuth } from "../../Context/AuthContext";
+
 const LandingPage = () => {
     const [popularMovies, setPopularMovies] = useState([]);
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
     const [upcomingMovies, setUpcomingMovies] = useState([]);
     const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [activeMovie, setActiveMovie] = useState(null);
 
-    const {authUser} = useAuth();
+    const { authUser } = useAuth();
 
     useEffect(() => {
         fetchPopularMovies();
@@ -18,17 +21,17 @@ const LandingPage = () => {
     }, []);
 
     const fetchPopularMovies = async () => {
-        const movies = await fetchMoviesByCategory("popular"); 
+        const movies = await fetchMoviesByCategory("popular");
         setPopularMovies(movies);
     };
 
     const fetchUpcomingMovies = async () => {
-        const movies = await fetchMoviesByCategory("upcoming"); 
+        const movies = await fetchMoviesByCategory("upcoming");
         setUpcomingMovies(movies);
     };
 
     const fetchNowPlayingMovies = async () => {
-        const movies = await fetchMoviesByCategory("now_playing"); 
+        const movies = await fetchMoviesByCategory("now_playing");
         setNowPlayingMovies(movies);
     };
 
@@ -37,15 +40,25 @@ const LandingPage = () => {
         setTopRatedMovies(movies);
     };
 
+    const handleMovieSelect = (movie) => {
+        setActiveMovie(movie);
+    };
 
     return (
         <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
             <h1 className="text-3xl font-bold text-center mb-8">Welcome! {authUser?.username}</h1>
-            <MovieCategoryRow title="Popular Movies" movies={popularMovies} />
-            <MovieCategoryRow title="Upcoming Movies" movies={upcomingMovies} />
-            <MovieCategoryRow title="Now Playing Movies" movies={nowPlayingMovies} />
-            <MovieCategoryRow title="Top Rated Movies" movies={topRatedMovies} />
+            <MovieCategoryRow title="Popular Movies" movies={popularMovies} onMovieSelect={handleMovieSelect} />
+            <MovieCategoryRow title="Upcoming Movies" movies={upcomingMovies} onMovieSelect={handleMovieSelect} />
+            <MovieCategoryRow title="Now Playing Movies" movies={nowPlayingMovies} onMovieSelect={handleMovieSelect} />
+            <MovieCategoryRow title="Top Rated Movies" movies={topRatedMovies} onMovieSelect={handleMovieSelect} />
+            {activeMovie && (
+                <MovieDetails
+                    movie={activeMovie}
+                    onClose={() => setActiveMovie(null)}
+                />
+            )}
         </div>
     );
 };
+
 export default LandingPage;

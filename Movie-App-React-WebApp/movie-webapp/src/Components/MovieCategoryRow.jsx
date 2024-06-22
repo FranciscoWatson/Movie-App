@@ -1,9 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import MovieCard from './MovieCard';
 
-const MovieCategoryRow = ({ title, movies }) => {
+const MovieCategoryRow = ({ title, movies, onMovieSelect }) => {
     const scrollRef = useRef(null);
     const [isScrollable, setIsScrollable] = useState(false);
+
+    useEffect(() => {
+        checkScrollable();
+        const handleResize = () => {
+            checkScrollable();
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const checkScrollable = () => {
         const { current } = scrollRef;
@@ -50,7 +61,7 @@ const MovieCategoryRow = ({ title, movies }) => {
             >
                 {movies && movies.length > 0 ? (
                     movies.map((movie) => (
-                        <div key={movie.id} className="min-w-[140px] max-w-[240px] flex-shrink-0">
+                        <div key={movie.id} className="min-w-[140px] max-w-[240px] flex-shrink-0" onClick={() => onMovieSelect(movie)}>
                             <MovieCard movie={movie} />
                         </div>
                     ))

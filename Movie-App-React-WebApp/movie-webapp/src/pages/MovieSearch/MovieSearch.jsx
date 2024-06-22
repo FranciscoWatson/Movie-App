@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "../../Components/MovieCard";
 import MovieDetails from "./Components/MovieDetails";
 import GenreFilter from "./Components/GenreFilter";
-
-import { fetchMovies, fetchGenres, fetchMovieGenres } from "../../Services/ApiReference";
+import { fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory } from "../../Services/ApiReference";
 
 const MovieSearch = () => {
   const [query, setQuery] = useState("");
@@ -13,7 +12,6 @@ const MovieSearch = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [actor, setActor] = useState("");
   const [director, setDirector] = useState("");
-  
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
@@ -21,9 +19,18 @@ const MovieSearch = () => {
       const allGenres = await fetchGenres();
       setGenres(allGenres.genres);
     };
-  
+
     fetchData();
-    }, [])
+  }, []);
+
+  useEffect(() => {
+    const fetchPopularMovies = async () => {
+      const popularMovies = await fetchMoviesByCategory("popular");
+      setMovies(popularMovies);
+    };
+
+    fetchPopularMovies();
+  }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -31,32 +38,31 @@ const MovieSearch = () => {
     setMovies(searchedMovies);
   };
 
-const handleShowFilter = () => setShowFilter(true);
+  const handleShowFilter = () => setShowFilter(true);
 
-const handleMovieSelect = (movie) => {
-  setActiveMovie(movie);
-};
-
-const handleGenreChange = (selectedGenres) => {
-  setSelectedGenres(selectedGenres);
-};
-
-useEffect(() => {
-  const fetchMoviesByGenres = async () => {
-    try {
-      const searchedMovies = await fetchMovieGenres(selectedGenres);
-      setMovies(searchedMovies);
-    } catch (error) {
-      console.error('Error al obtener películas por géneros:', error);
-    }
+  const handleMovieSelect = (movie) => {
+    setActiveMovie(movie);
   };
 
-  if (selectedGenres.length > 0) {
-    setQuery("");
-    fetchMoviesByGenres();
-  }
-}, [selectedGenres]); 
+  const handleGenreChange = (selectedGenres) => {
+    setSelectedGenres(selectedGenres);
+  };
 
+  useEffect(() => {
+    const fetchMoviesByGenres = async () => {
+      try {
+        const searchedMovies = await fetchMovieGenres(selectedGenres);
+        setMovies(searchedMovies);
+      } catch (error) {
+        console.error("Error al obtener películas por géneros:", error);
+      }
+    };
+
+    if (selectedGenres.length > 0) {
+      setQuery("");
+      fetchMoviesByGenres();
+    }
+  }, [selectedGenres]);
 
   return (
     <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
@@ -77,15 +83,23 @@ useEffect(() => {
               Search
             </button>
             <button
+              type="button"
               className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
               onClick={handleShowFilter}
             >
               Advanced Search
             </button>
           </form>
-          {showFilter && <GenreFilter genres={genres} selectedGenres={selectedGenres} onGenreChange={handleGenreChange} onClose={()=>setShowFilter(false)}/>}
+          {showFilter && (
+            <GenreFilter
+              genres={genres}
+              selectedGenres={selectedGenres}
+              onGenreChange={handleGenreChange}
+              onClose={() => setShowFilter(false)}
+            />
+          )}
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-2">
           {movies.map((movie) => (
             <div key={movie.id} onClick={() => handleMovieSelect(movie)}>
@@ -94,10 +108,7 @@ useEffect(() => {
           ))}
         </div>
         {activeMovie && (
-          <MovieDetails
-            movie={activeMovie}
-            onClose={() => setActiveMovie(null)}
-          />
+          <MovieDetails movie={activeMovie} onClose={() => setActiveMovie(null)} />
         )}
       </div>
     </div>
