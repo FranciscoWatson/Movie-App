@@ -1,17 +1,17 @@
-// src/Components/MovieCard.jsx
 import React, { useState, useEffect } from "react";
 import { useLists } from "../Context/ListContext";
 import { useAuth } from "../Context/AuthContext";
-import { createMovieList } from '../Services/BackendApi'; // Importar createMovieList
-
+import { createMovieList } from '../Services/BackendApi';
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MovieCard = ({ movie, onCardClick }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedList, setSelectedList] = useState('');
   const { lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName } = useLists();
   const { authUser } = useAuth();
+  
+  // Inicializa isFavorite basándose en si la película está en favoritos
+  const [isFavorite, setIsFavorite] = useState(favorites.includes(movie.id));
+  const [selectedList, setSelectedList] = useState('');
 
   useEffect(() => {
     setIsFavorite(favorites.includes(movie.id));
@@ -24,7 +24,6 @@ const MovieCard = ({ movie, onCardClick }) => {
     } else {
       await addToFavoritesList(movie.id);
     }
-    setIsFavorite(!isFavorite);
   };
 
   const handleAddToList = async (event) => {
@@ -58,7 +57,9 @@ const MovieCard = ({ movie, onCardClick }) => {
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-75 flex flex-col items-center justify-center p-4">
         <h3 className="text-lg font-bold text-white mb-2">{movie.title}</h3>
         <p className="text-sm text-gray-300 mb-4">Rating: {movie.vote_average || "N/A"}</p>
-        <button onClick={handleToggleFavorite} className={`mt-2 px-4 py-2 rounded-full text-sm font-medium ${isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white transition duration-300`}>{isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}</button>
+        <button onClick={handleToggleFavorite} className={`mt-2 px-4 py-2 rounded-full text-sm font-medium ${isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white transition duration-300`}>
+          {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+        </button>
         <div className="mt-4 w-full space-y-2">
           <select value={selectedList} onChange={(e) => setSelectedList(e.target.value)} onClick={e => e.stopPropagation()} className="w-full p-2 bg-gray-700 text-white rounded-md cursor-pointer">
             <option value="">Select a list</option>

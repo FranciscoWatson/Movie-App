@@ -1,4 +1,3 @@
-// src/pages/UserList/UserList.jsx
 import React, { useEffect, useState } from 'react';
 import MovieCategoryRow from '../../Components/MovieCategoryRow';
 import { useLists } from '../../Context/ListContext';
@@ -31,7 +30,7 @@ const UserList = () => {
         <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
             <h1 className="text-3xl font-bold text-center mb-8">User Lists</h1>
             {Object.keys(moviesByList).length > 0 ? Object.entries(moviesByList).map(([listName, movies]) => (
-                <MovieCategoryRow key={listName} title={listName} movies={movies} />
+                <MovieCategoryRow key={listName} title={listName} movies={movies} favorites={favorites} />
             )) : <p>No lists found or lists are empty.</p>}
         </div>
     );
