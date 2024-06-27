@@ -141,4 +141,15 @@ const updateUser = async (username, userData) => {
     }
 };
 
-export {registerUser, loginUser, getUserLists, getFavoriteList, addToFavorites, createMovieList, deleteMovieList, addMovieToList, deleteMovieFromList, deleteUser, updateUser}
+const removeFromFavorites = async (username, movieId) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/users/${username}/favorites/${movieId}`, {
+            method: 'DELETE'
+        });
+        return response.json();
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export {registerUser, loginUser, getUserLists, getFavoriteList, addToFavorites, createMovieList, deleteMovieList, addMovieToList, deleteMovieFromList, deleteUser, updateUser, removeFromFavorites}

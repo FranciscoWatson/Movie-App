@@ -1,5 +1,6 @@
+// src/Components/MovieCard.jsx
 import React, { useState, useEffect } from "react";
-import { getFavoriteList, addToFavorites, addMovieToList, createMovieList, getUserLists } from "../Services/BackendApi";
+import { useLists } from "../Context/ListContext";
 import { useAuth } from "../Context/AuthContext";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -7,66 +8,38 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const MovieCard = ({ movie, onCardClick }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedList, setSelectedList] = useState('');
-  const [lists, setLists] = useState([]);
-  const [favoriteList, setFavoriteList] = useState(null);
-
-  const { authUser } = useAuth(); 
+  const { lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName } = useLists();
+  const { authUser } = useAuth();
 
   useEffect(() => {
-    const initialize = async () => {
-      try {
-        const favorites = await getFavoriteList(authUser.username);
-        setFavoriteList(favorites);
-
-        const movieLists = await getUserLists(authUser.username);
-        const listNames = movieLists.map(list => list.name);
-        setLists(listNames);
-      } catch (error) {
-        console.error("Error fetching lists or favorites:", error);
-      }
-    };
-
-    initialize();
-  }, []);
+    setIsFavorite(favorites.includes(movie.id));
+  }, [favorites, movie.id]);
 
   const handleToggleFavorite = async (event) => {
     event.stopPropagation();
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     if (isFavorite) {
-      const filteredFavorites = favorites.filter(id => id !== movie.id);
-      localStorage.setItem('favorites', JSON.stringify(filteredFavorites));
-      setIsFavorite(false);
+      await removeFromFavoritesList(movie.id);
     } else {
-      try{
-        const response = await addToFavorites(authUser.username, movie.id);
-      }catch(error){
-        console.log(error);
-      }
-      setIsFavorite(true);
+      await addToFavoritesList(movie.id);
     }
+    setIsFavorite(!isFavorite);
   };
 
   const handleAddToList = async (event) => {
     event.stopPropagation();
-    if (selectedList && lists.includes(selectedList)) {
-      try{
-        const response = await addMovieToList(authUser.username, selectedList, movie.id);
-        alert(`Movie added to ${selectedList}`);
-      }catch(error){
-        console.error("Error adding movie to list:", error);
-      }
+    if (selectedList && lists[selectedList] && !lists[selectedList].includes(movie.id)) {
+      await addMovieToListByName(selectedList, movie.id);
     }
   };
 
   const handleCreateNewList = async (event) => {
     event.stopPropagation();
     if (selectedList && !lists[selectedList]) {
-      try{
+      try {
         await createMovieList(authUser.username, selectedList);
-        setLists([...lists, selectedList]);
-        alert(`List '${selectedList}' created successfully!`);
-      }catch(error){
-        console.log(error);
+        await addMovieToListByName(selectedList, movie.id);
+      } catch (error) {
+        console.error("Error creating new list or adding movie:", error);
       }
     } else {
       alert('List already exists or invalid name.');
@@ -87,7 +60,7 @@ const MovieCard = ({ movie, onCardClick }) => {
         <div className="mt-4 w-full space-y-2">
           <select value={selectedList} onChange={(e) => setSelectedList(e.target.value)} onClick={e => e.stopPropagation()} className="w-full p-2 bg-gray-700 text-white rounded-md cursor-pointer">
             <option value="">Select a list</option>
-            {lists.map((list) => (
+            {Object.keys(lists).map((list) => (
               <option key={list} value={list}>{list}</option>
             ))}
           </select>
