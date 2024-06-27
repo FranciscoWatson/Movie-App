@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useLists } from "../Context/ListContext";
 import { useAuth } from "../Context/AuthContext";
+import { createMovieList } from '../Services/BackendApi'; // Importar createMovieList
+
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 

@@ -1,6 +1,5 @@
-// src/Context/ListContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getUserLists, getFavoriteList, addToFavorites, removeFromFavorites, addMovieToList, deleteMovieFromList } from '../Services/BackendApi';
+import { getUserLists, getFavoriteList, addToFavorites, removeFromFavorites, addMovieToList, deleteMovieFromList, createMovieList } from '../Services/BackendApi';
 import { useAuth } from './AuthContext';
 
 const ListContext = createContext();
@@ -74,8 +73,7 @@ export const ListProvider = ({ children }) => {
   const removeMovieFromListByName = async (listName, movieId) => {
     if (lists[listName]?.includes(movieId)) {
       try {
-        const listId = Object.keys(lists).find(key => lists[key].includes(movieId));
-        await deleteMovieFromList(authUser.username, listId, movieId);
+        await deleteMovieFromList(authUser.username, listName, movieId);
         setLists({
           ...lists,
           [listName]: lists[listName].filter(id => id !== movieId)
