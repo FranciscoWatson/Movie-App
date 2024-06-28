@@ -1,5 +1,7 @@
+// UserList.js
 import React, { useEffect, useState } from 'react';
 import MovieCategoryRow from '../../Components/MovieCategoryRow';
+import UserMovieCard from './Components/UserMovieCard';
 import { useLists } from '../../Context/ListContext';
 import { fetchMovieDetails } from "../../Services/ApiReference";
 
@@ -30,7 +32,16 @@ const UserList = () => {
         <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
             <h1 className="text-3xl font-bold text-center mb-8">User Lists</h1>
             {Object.keys(moviesByList).length > 0 ? Object.entries(moviesByList).map(([listName, movies]) => (
-                <MovieCategoryRow key={listName} title={listName} movies={movies} favorites={favorites} />
+                <div key={listName}>
+                    <h2 className="text-xl font-bold mb-4">{listName}</h2>
+                    <div className="flex overflow-x-auto py-4 space-x-4 scrollbar-hide pl-8 pr-8">
+                        {movies.map((movie) => (
+                            <div key={movie.id} className="min-w-[140px] max-w-[240px] flex-shrink-0">
+                                <UserMovieCard movie={movie} listName={listName} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             )) : <p>No lists found or lists are empty.</p>}
         </div>
     );
