@@ -1,5 +1,6 @@
 import React from "react";
 import { useLists } from "../../../Context/ListContext";
+import { removeFromFavorites, deleteMovieFromList } from "../../../Services/BackendApi";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -10,6 +11,7 @@ const UserMovieCard = ({ movie, listName, onRemove }) => {
     event.stopPropagation();
     if (listName === 'Favorites') {
       await removeFromFavoritesList(movie.id);
+      await removeFromFavorites(movie.id);
     } else {
       await removeMovieFromListByName(listName, movie.id);
     }
