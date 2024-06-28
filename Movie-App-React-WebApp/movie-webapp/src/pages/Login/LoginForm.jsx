@@ -21,7 +21,7 @@ const LoginForm = () => {
       const response = await loginUser({ username, password });
       setIsLoggedIn(true);
       setAuthUser(response.user);
-      navigate("/Profile");
+      navigate("/");
     } catch (error) {
       setError(true);
       setErrorMessage("Invalid username or password");

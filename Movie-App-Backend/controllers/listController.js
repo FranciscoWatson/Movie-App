@@ -105,7 +105,7 @@ const removeMovieFromList = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    let list = user.lists.find((list) => list._id.toString() === listId);
+    let list = user.lists.find((list) => list.name === listId);
 
     if (!list) {
       return res.status(404).send('List not found');

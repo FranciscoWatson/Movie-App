@@ -1,11 +1,13 @@
 import React from "react";
 import { useLists } from "../../../Context/ListContext";
 import { removeFromFavorites, deleteMovieFromList } from "../../../Services/BackendApi";
+import { useAuth } from "../../../Context/AuthContext";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const UserMovieCard = ({ movie, listName, onRemove }) => {
   const { removeMovieFromListByName, removeFromFavoritesList } = useLists();
+  const {authUser} = useAuth();
 
   const handleRemove = async (event) => {
     event.stopPropagation();
@@ -14,6 +16,7 @@ const UserMovieCard = ({ movie, listName, onRemove }) => {
       await removeFromFavorites(movie.id);
     } else {
       await removeMovieFromListByName(listName, movie.id);
+      await deleteMovieFromList(authUser.username, listName, movie.id);
     }
     onRemove(movie.id);
   };
