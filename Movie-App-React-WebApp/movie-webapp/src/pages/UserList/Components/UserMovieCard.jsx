@@ -13,7 +13,7 @@ const UserMovieCard = ({ movie, listName, onRemove }) => {
     event.stopPropagation();
     if (listName === 'Favorites') {
       await removeFromFavoritesList(movie.id);
-      await removeFromFavorites(movie.id);
+      await removeFromFavorites(authUser.username, movie.id);
     } else {
       await removeMovieFromListByName(listName, movie.id);
       await deleteMovieFromList(authUser.username, listName, movie.id);
