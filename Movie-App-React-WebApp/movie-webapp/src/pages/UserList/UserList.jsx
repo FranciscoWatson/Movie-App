@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import MovieUserListCategoryRow from './Components/MovieUserListCategoryRow';
 import { useLists } from '../../Context/ListContext';
 import { fetchMovieDetails } from "../../Services/ApiReference";
+import MovieDetails from "../MovieSearch/Components/MovieDetails";
 
 const UserList = () => {
     const { lists, favorites } = useLists();
     const [moviesByList, setMoviesByList] = useState({});
+    const [activeMovie, setActiveMovie] = useState(null);
+    
     
     useEffect(() => {
         const fetchAllMovies = async () => {
@@ -33,18 +36,30 @@ const UserList = () => {
         }));
     };
 
+    const handleMovieSelect = (movie) => {
+        setActiveMovie(movie);
+    };
+
     return (
-        <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
-            <h1 className="text-3xl font-bold text-center mb-8">User Lists</h1>
-            {Object.keys(moviesByList).length > 0 ? Object.entries(moviesByList).map(([listName, movies]) => (
-                <MovieUserListCategoryRow
-                    key={listName}
-                    title={listName}
-                    movies={movies}
-                    onMovieSelect={(movie) => console.log(`Selected movie: ${movie.title}`)}
-                    onRemove={(movieId) => handleRemoveMovie(listName, movieId)}
+        <div>
+            <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
+                <h1 className="text-3xl font-bold text-center mb-8">User Lists</h1>
+                {Object.keys(moviesByList).length > 0 ? Object.entries(moviesByList).map(([listName, movies]) => (
+                    <MovieUserListCategoryRow
+                        key={listName}
+                        title={listName}
+                        movies={movies}
+                        onMovieSelect={handleMovieSelect}
+                        onRemove={(movieId) => handleRemoveMovie(listName, movieId)}
+                    />
+                )) : <p>No lists found or lists are empty.</p>}
+            </div>
+            {activeMovie && (
+                <MovieDetails
+                    movie={activeMovie}
+                    onClose={() => setActiveMovie(null)}
                 />
-            )) : <p>No lists found or lists are empty.</p>}
+            )}
         </div>
     );
 };
