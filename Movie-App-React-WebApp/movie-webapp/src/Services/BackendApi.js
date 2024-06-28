@@ -1,23 +1,23 @@
-const BASE_URL = "http://localhost:3001/"
+const BASE_URL = "http://localhost:3001/api/";
 
-const registerUser = async  (userData) => {
-    try{
-        const response = await fetch('http://localhost:3001/api/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    });
+const registerUser = async (userData) => {
+    try {
+        const response = await fetch(`${BASE_URL}users/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
         return response.json();
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 };
 
 const loginUser = async (credentials) => {
     try {
-        const response = await fetch('http://localhost:3001/api/login', {
+        const response = await fetch(`${BASE_URL}users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ const loginUser = async (credentials) => {
 
 const getUserLists = async (username) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/lists`);
+        const response = await fetch(`${BASE_URL}lists/${username}/lists`);
         return response.json();
     } catch (error) {
         console.error(error);
@@ -41,7 +41,7 @@ const getUserLists = async (username) => {
 
 const getFavoriteList = async (username) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/favorites`);
+        const response = await fetch(`${BASE_URL}users/${username}/favorites`);
         return response.json();
     } catch (error) {
         console.error(error);
@@ -50,7 +50,7 @@ const getFavoriteList = async (username) => {
 
 const addToFavorites = async (username, movieId) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/addFavorites`, {
+        const response = await fetch(`${BASE_URL}users/${username}/addFavorites`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const addToFavorites = async (username, movieId) => {
 
 const createMovieList = async (username, listName) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/lists`, {
+        const response = await fetch(`${BASE_URL}lists/${username}/lists`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ const createMovieList = async (username, listName) => {
 
 const deleteMovieList = async (username, listId) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/lists/${listId}`, {
+        const response = await fetch(`${BASE_URL}lists/${username}/lists/${listId}`, {
             method: 'DELETE'
         });
         return response.json();
@@ -91,7 +91,7 @@ const deleteMovieList = async (username, listId) => {
 
 const addMovieToList = async (username, listName, movieId) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/lists/${listName}/addMovie`, {
+        const response = await fetch(`${BASE_URL}lists/${username}/lists/${listName}/addMovie`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ const addMovieToList = async (username, listName, movieId) => {
 
 const deleteMovieFromList = async (username, listId, movieId) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}/lists/${listId}/movies/${movieId}`, {
+        const response = await fetch(`${BASE_URL}lists/${username}/lists/${listId}/movies/${movieId}`, {
             method: 'DELETE'
         });
         return response.json();
@@ -117,7 +117,7 @@ const deleteMovieFromList = async (username, listId, movieId) => {
 
 const deleteUser = async (username) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}`, {
+        const response = await fetch(`${BASE_URL}users/${username}`, {
             method: 'DELETE'
         });
         return response.json();
@@ -128,7 +128,7 @@ const deleteUser = async (username) => {
 
 const updateUser = async (username, userData) => {
     try {
-        const response = await fetch(`http://localhost:3001/api/users/${username}`, {
+        const response = await fetch(`${BASE_URL}users/${username}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ const updateUser = async (username, userData) => {
 
 const removeFromFavorites = async (username, movieId) => {
     try {
-        const response = await fetch(`${BASE_URL}api/users/${username}/favorites/${movieId}`, {
+        const response = await fetch(`${BASE_URL}users/${username}/favorites/${movieId}`, {
             method: 'DELETE'
         });
         return response.json();
@@ -152,4 +152,17 @@ const removeFromFavorites = async (username, movieId) => {
     }
 };
 
-export {registerUser, loginUser, getUserLists, getFavoriteList, addToFavorites, createMovieList, deleteMovieList, addMovieToList, deleteMovieFromList, deleteUser, updateUser, removeFromFavorites}
+export {
+    registerUser,
+    loginUser,
+    getUserLists,
+    getFavoriteList,
+    addToFavorites,
+    createMovieList,
+    deleteMovieList,
+    addMovieToList,
+    deleteMovieFromList,
+    deleteUser,
+    updateUser,
+    removeFromFavorites
+};

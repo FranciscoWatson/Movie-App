@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useLists } from "../Context/ListContext";
 import { useAuth } from "../Context/AuthContext";
-import { createMovieList } from '../Services/BackendApi';
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MovieCard = ({ movie, onCardClick }) => {
-  const { lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName } = useLists();
+  const { lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName, createNewList } = useLists();
   const { authUser } = useAuth();
   
-  // Inicializa isFavorite basándose en si la película está en favoritos
   const [isFavorite, setIsFavorite] = useState(favorites.includes(movie.id));
   const [selectedList, setSelectedList] = useState('');
+  const [newListName, setNewListName] = useState('');
 
   useEffect(() => {
     setIsFavorite(favorites.includes(movie.id));
@@ -35,12 +34,12 @@ const MovieCard = ({ movie, onCardClick }) => {
 
   const handleCreateNewList = async (event) => {
     event.stopPropagation();
-    if (selectedList && !lists[selectedList]) {
+    if (newListName && !lists[newListName]) {
       try {
-        await createMovieList(authUser.username, selectedList);
-        await addMovieToListByName(selectedList, movie.id);
+        await createNewList(newListName);
+        setNewListName(''); // Limpia el campo de texto después de crear la lista
       } catch (error) {
-        console.error("Error creating new list or adding movie:", error);
+        console.error("Error creating new list:", error);
       }
     } else {
       alert('List already exists or invalid name.');
@@ -68,7 +67,7 @@ const MovieCard = ({ movie, onCardClick }) => {
             ))}
           </select>
           <button onClick={handleAddToList} className="w-full px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-md text-white transition duration-300">Add to List</button>
-          <input type="text" placeholder="New list name" value={selectedList} onChange={(e) => setSelectedList(e.target.value)} onClick={e => e.stopPropagation()} className="w-full p-2 bg-gray-700 text-white rounded-md"/>
+          <input type="text" placeholder="New list name" value={newListName} onChange={(e) => setNewListName(e.target.value)} onClick={e => e.stopPropagation()} className="w-full p-2 bg-gray-700 text-white rounded-md"/>
           <button onClick={handleCreateNewList} className="w-full px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md text-white transition duration-300">Create New List</button>
         </div>
       </div>

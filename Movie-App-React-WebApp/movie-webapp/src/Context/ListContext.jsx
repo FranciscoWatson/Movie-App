@@ -84,8 +84,22 @@ export const ListProvider = ({ children }) => {
     }
   };
 
+  const createNewList = async (listName) => {
+    if (!lists[listName]) {
+      try {
+        await createMovieList(authUser.username, listName);
+        setLists({
+          ...lists,
+          [listName]: []
+        });
+      } catch (error) {
+        console.error("Error creating new list:", error);
+      }
+    }
+  };
+
   return (
-    <ListContext.Provider value={{ lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName, removeMovieFromListByName }}>
+    <ListContext.Provider value={{ lists, favorites, addToFavoritesList, removeFromFavoritesList, addMovieToListByName, removeMovieFromListByName, createNewList }}>
       {children}
     </ListContext.Provider>
   );
