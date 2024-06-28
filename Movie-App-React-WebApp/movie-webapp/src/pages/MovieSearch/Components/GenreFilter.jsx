@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const GenreFilter = ({ genres, selectedGenres, onGenreChange, onClose }) => {
+const GenreFilter = ({ genres, selectedGenres, onGenreChange, actor, onActorChange, director, onDirectorChange, company, onCompanyChange, onSearch, onClose }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleItemClick = (genreId) => {
@@ -16,7 +16,7 @@ const GenreFilter = ({ genres, selectedGenres, onGenreChange, onClose }) => {
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 rounded-lg">
+    <div className="bg-gray-800 text-white p-4 rounded-lg relative">
       <div className="flex items-start">
         <div className="relative mr-6">
           <button
@@ -26,7 +26,7 @@ const GenreFilter = ({ genres, selectedGenres, onGenreChange, onClose }) => {
             Select Genres
           </button>
           {isDropdownOpen && (
-            <ul className="absolute mt-2 bg-gray-700 text-white rounded-lg shadow-lg max-h-48 overflow-y-auto">
+            <ul className="absolute mt-2 bg-gray-700 text-white rounded-lg shadow-lg max-h-48 overflow-y-auto z-50">
               {genres.map((currentGenre) => (
                 <li
                   key={currentGenre.id}
@@ -40,22 +40,26 @@ const GenreFilter = ({ genres, selectedGenres, onGenreChange, onClose }) => {
           )}
         </div>
 
-        <div className="flex flex-col flex-grow space-y-4 h-full">
+        <div className="flex-grow flex items-center space-x-4">
           <input
             type="text"
             placeholder="Search for an Actor"
+            value={actor}
+            onChange={(e) => onActorChange(e.target.value)}
             className="p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-700 bg-gray-600 text-white placeholder-gray-400 flex-grow"
           />
-
           <input
             type="text"
             placeholder="Search for Director"
+            value={director}
+            onChange={(e) => onDirectorChange(e.target.value)}
             className="p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-700 bg-gray-600 text-white placeholder-gray-400 flex-grow"
           />
-
           <input
             type="text"
             placeholder="Search for a Company"
+            value={company}
+            onChange={(e) => onCompanyChange(e.target.value)}
             className="p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-700 bg-gray-600 text-white placeholder-gray-400 flex-grow"
           />
         </div>
@@ -75,8 +79,11 @@ const GenreFilter = ({ genres, selectedGenres, onGenreChange, onClose }) => {
         })}
       </div>
 
+      <button type="button" className="mt-4 px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300" onClick={onSearch}>
+        Search
+      </button>
       <button type="button" className="mt-4 px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300" onClick={onClose}>
-        Cerrar
+        Close
       </button>
     </div>
   );

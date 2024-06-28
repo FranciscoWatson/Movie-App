@@ -118,6 +118,10 @@ app.post('/api/users/:username/lists/:listName/addMovie', async (req, res) => {
       return res.status(404).send('List not found');
     }
 
+    if (list.movies.includes(movieId)) {
+      return res.status(400).send('Movie already exists in the list');
+    }
+
     list.movies.push(movieId);
 
     await user.save();
@@ -274,6 +278,10 @@ app.post('/api/users/:username/addFavorites', async (req, res) => {
 
     if (!user) {
       return res.status(404).send('User not found');
+    }
+
+    if (user.favoriteList.includes(movieId)) {
+      return res.status(400).send('Movie already exists in the favorite list');
     }
 
     user.favoriteList.push(movieId);

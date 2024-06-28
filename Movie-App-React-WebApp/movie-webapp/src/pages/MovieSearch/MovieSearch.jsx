@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "../../Components/MovieCard";
 import MovieDetails from "./Components/MovieDetails";
 import GenreFilter from "./Components/GenreFilter";
-import { fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory } from "../../Services/ApiReference";
+import { fetchMovies, fetchGenres, fetchMovieGenres, fetchMoviesByCategory, fetchMoviesAdvanced } from "../../Services/ApiReference";
 
 const MovieSearch = () => {
   const [query, setQuery] = useState("");
@@ -12,6 +12,7 @@ const MovieSearch = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [actor, setActor] = useState("");
   const [director, setDirector] = useState("");
+  const [company, setCompany] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
@@ -48,53 +49,52 @@ const MovieSearch = () => {
     setSelectedGenres(selectedGenres);
   };
 
-  useEffect(() => {
-    const fetchMoviesByGenres = async () => {
-      try {
-        const searchedMovies = await fetchMovieGenres(selectedGenres);
-        setMovies(searchedMovies);
-      } catch (error) {
-        console.error("Error al obtener películas por géneros:", error);
-      }
-    };
-
-    if (selectedGenres.length > 0) {
-      setQuery("");
-      fetchMoviesByGenres();
-    }
-  }, [selectedGenres]);
+  const handleAdvancedSearch = async () => {
+    const searchedMovies = await fetchMoviesAdvanced(selectedGenres, actor, director, company);
+    setMovies(searchedMovies);
+    // No cerramos el filtro avanzado
+  };
 
   return (
     <div className="min-h-screen bg-netflix-dark text-white px-4 py-8">
       <div className="max-w mx-auto">
         <div>
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mb-4">
-            <input
-              type="text"
-              placeholder="Search movies..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
-            >
-              Search
-            </button>
-            <button
-              type="button"
-              className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
-              onClick={handleShowFilter}
-            >
-              Advanced Search
-            </button>
-          </form>
+          {!showFilter && (
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="Search movies..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="flex-1 p-2 outline-none rounded-lg focus:ring-2 focus:ring-netflix-red focus:bg-gray-800 bg-gray-700 text-white placeholder-gray-400"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
+              >
+                Search
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 bg-netflix-red hover:bg-red-700 rounded-lg transition duration-300"
+                onClick={handleShowFilter}
+              >
+                Advanced Search
+              </button>
+            </form>
+          )}
           {showFilter && (
             <GenreFilter
               genres={genres}
               selectedGenres={selectedGenres}
               onGenreChange={handleGenreChange}
+              actor={actor}
+              onActorChange={setActor}
+              director={director}
+              onDirectorChange={setDirector}
+              company={company}
+              onCompanyChange={setCompany}
+              onSearch={handleAdvancedSearch}
               onClose={() => setShowFilter(false)}
             />
           )}
