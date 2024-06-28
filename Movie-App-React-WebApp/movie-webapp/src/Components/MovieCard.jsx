@@ -29,6 +29,7 @@ const MovieCard = ({ movie, onCardClick }) => {
     event.stopPropagation();
     if (selectedList && lists[selectedList] && !lists[selectedList].includes(movie.id)) {
       await addMovieToListByName(selectedList, movie.id);
+      alert('Movie added succesfully');
     }
   };
 
