@@ -3,7 +3,7 @@ import { useLists } from "../../../Context/ListContext";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-const UserMovieCard = ({ movie, listName }) => {
+const UserMovieCard = ({ movie, listName, onRemove }) => {
   const { removeMovieFromListByName, removeFromFavoritesList } = useLists();
 
   const handleRemove = async (event) => {
@@ -13,6 +13,7 @@ const UserMovieCard = ({ movie, listName }) => {
     } else {
       await removeMovieFromListByName(listName, movie.id);
     }
+    onRemove(movie.id);
   };
 
   return (
