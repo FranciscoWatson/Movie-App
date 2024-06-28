@@ -3,45 +3,33 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { loginUser } from "../../Services/BackendApi";
 
-const LoginForm = ({ onLogin }) => {
-  const [username, setusername] = useState("");
+const LoginForm = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
-  const {authUser,
-        setAuthUser,
-        isLoggedIn,
-        setIsLoggedIn} = useAuth(); 
+  const { setAuthUser, setIsLoggedIn } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await loginUser({username, password});
-      console.log(response);
-      console.log(response.user.username);
-
+      const response = await loginUser({ username, password });
       setIsLoggedIn(true);
-      setAuthUser({
-        "username": response.user.username,
-        "firstname": response.user.firstName,
-        "lastname": response.user.lastName
-      });
-      navigate("/");
-
+      setAuthUser(response.user);
+      navigate("/Profile");
     } catch (error) {
       setError(true);
-      setErrorMessage("Usuario o contraseña invalidos");
+      setErrorMessage("Invalid username or password");
     }
   };
-  
 
   const handleRegisterClick = () => {
-    navigate("/Register"); // Redirige al formulario de registro al hacer clic en el enlace
+    navigate("/Register");
   };
 
   return (
@@ -49,13 +37,13 @@ const LoginForm = ({ onLogin }) => {
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-gray-800 p-8 rounded shadow-md">
         <h2 className="text-2xl font-bold mb-4 text-center text-white">Login</h2>
         <input
-          type="username"
-          placeholder="username"
+          type="text"
+          placeholder="Username"
           value={username}
           onChange={(e) => {
             setError(false);
-            setusername(e.target.value)
-            }}
+            setUsername(e.target.value);
+          }}
           className="block w-full p-3 mb-4 border border-gray-700 rounded-md focus:outline-none focus:ring focus:border-yellow-400 transition duration-300 bg-gray-800 text-white"
         />
 
@@ -65,14 +53,12 @@ const LoginForm = ({ onLogin }) => {
           value={password}
           onChange={(e) => {
             setError(false);
-            setPassword(e.target.value)
-            }}
+            setPassword(e.target.value);
+          }}
           className="block w-full p-3 mb-4 border border-gray-700 rounded-md focus:outline-none focus:ring focus:border-yellow-400 transition duration-300 bg-gray-800 text-white"
         />
 
-        {error && <div className="bg-orange-600 text-white p-3 mb-4 ">
-                  {errorMessage}
-                </div>}
+        {error && <div className="bg-orange-600 text-white p-3 mb-4">{errorMessage}</div>}
 
         <button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md transition duration-300">
           Login
